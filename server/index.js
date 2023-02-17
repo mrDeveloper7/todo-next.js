@@ -61,6 +61,7 @@ app.get("/alltodos", (req, res) => {
     }
   });
 });
+
 //Update
 app.put("/update", async (req, res) => {
   const id = req.body._id;
@@ -83,6 +84,21 @@ app.delete("/delete/:id", async (req, res) => {
 
   await TodoModel.findByIdAndRemove(id).exec();
   res.send("Deleted");
+});
+
+//Login
+app.post("/login", async (req, res) => {
+  const user = req.body.user;
+
+  try {
+    const newUser = await UserModel.findOne({ name: user });
+    if (newUser.name == user) {
+      // return res.send(`User ${user} exists in DB`);
+      res.json({ status: "ok", data: newUser });
+    } else return res.send("No User found");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 const PORT = 3001;
